@@ -1,0 +1,78 @@
+1:  When we first tried to make and run our code, a segmentation fault was encountered during the boot process of boot.s in our
+project. The root causes were twofold: first, there was inconsistency among team members regarding who should modify boot.s to 
+correctly load the GDT, with one member implementing the changes and others not, leading to an inconsistency in which file we used 
+in the master branch. Second, the initial setup as per the documentation was not properly executed. To resolve this, we added the 
+load gdt instruction in boot.s, and we meticulously followed the initial setup guidelines. After these changes, we successfully 
+eliminated the segfault issue, enabling the system to boot without compiler errors. In the future, we will enhance team communication 
+to prevent such discrepancies in code modifications and ensure strict adherence to documentation for initial setup procedures. Finding 
+the bug: 15 minutes. Fixing the bug: 10 minutes.
+
+2:  After booting the program, we experienced boot-looping where the program keeps rebooting itself. We were not able to fix this bug 
+without omitting large portions of the program.
+
+3:  After fixing some compiler errors, we faced a double fault where the CPU fails to invoke an exception handler. We were not able to 
+fix this bug in time.
+
+4:  After some changes, the system is still boot looping. I cannot exit out of the program without closing the window. Everytime I do
+restart, and compile again, I get the error "unable to execute ./debug.sh: No such file or directory". The boot looping is apparently 
+due to a circulation inclusion of header files, but I wasn't able to find the source of the problem. the ./debug.sh problem caused me 
+to reload the mp3 image everytime I had to compile. The way I solved the problem was just restarting everything and copying and pasting
+the files that I have changed. In the end, this fixed the problem. Finding the bug: N/A. Fixing the bug: 8 hours.
+
+5: After verifying that the system boots and idt is working, I started testing the keyboard implementation. When I first started 
+testing, the keyboard only prints one letter and freezes after. This was fixed after I changed the type of the input and output from
+int to uint8_t. Finding the bug: 2 hours. Fixing the bug: 10 minutes.
+
+6: for the rtc change freq test, we had issues getting the test to actually print tot hte screen like in the demo. Rather, we saw the 
+result of the last test's 1s and the test passed but not it goint through all the power of tens. the fix took about an hour to find and 
+15 minutes to fix after that. The problem was that I never actuallcy called read or write, so it just iterated throughthe test as fast 
+as the processor could. Once I added the read and writes, it actually took as long as it was supposed to (the desired freq) to print to 
+the screen. Finding the bug: 1 hour. Fixing the bug: 15 minutes.
+
+7: When testing vertical scrolling in the terminal, a lot of random characters are printing onto the screen, with no pattern and we had
+no idea where they werer coming from, instead of the rows of texts moving up with a new empty line on the bottom. We were on this for a 
+while and how we fixed it was adding a new line at the end of the if statement block before the comments. Finding the bug: 3 hours. 
+Fixing the bug: 15 minutes.
+
+8: When testing terminal read/write functionality, and when the buffer size is smaller than the input size, the handling of the terminal
+read was incorrect. After inputting a string that is longer than the buffer size, the prompt for the next read with a new buffer size 
+is instantly prompted without writing the string onto the screen. Additionally, when entering another string, the second string isn't
+echoed. But the overflow portion of the last string is written to the screen. We fixed this by just properly handling the case where
+the buffer isn't big enough to fit the whole string. Finding the bug: 90 minutes. Fixing the bug: 30 minutes.
+
+9: When testing directory read where we wanted to print all the files present in the directory. I also wanted to print the file sizes
+of each file. However, it was only printing the file name length. The problem was that I was getting the length of the buffer that was
+stored by by_index. To fix this, I used the dentry that was passed throught to get the inode number and calculate the current inode. 
+From there, I stored the legnth variable of that inode and returned it to the test function. Finding the bug: 10 minutes. Fixing the 
+bug: 15 minutes.
+
+10: After implementing all the system calls and copmiling our code, we ran into a bug where shell isn't starting. We checked that the
+program is stepping into the execute system call function, but the shell program wasn't executing. We realized that this was due to 
+our paging operations were not implemented and added properly. We stopped having this error after we fixed the paging. Finding the bug: 
+2 hours. Fixing the bug: 90 minutes.
+
+11: After trying to fix the previous bug, we experienced a boot looping bug our system was booting and crashing repeated. We were not
+sure about the cause of this bug. After a while of gdb and trying out different possible fixes, we found that the error is within the
+keyboard files. We made some edits to the keyboard and now it is no longer boot looping. Finding the bug: 15 hours. Fixing the bug: 
+90 minutes. 
+
+12: We had an edge case where when we halt the base shell program and then call the ls program, it produces a bunch of page faults, 
+which also leads to the system rebooting. This was due to the handling of restarting shell when the user exits the base shell program.
+I used to just reset the pcb and call execute with shell as the parameter. I changed this to directly doing the context switching
+inside the halt function and it worked. Finding the bug: 2 hours. Fixing the bug: 20 minutes. 
+
+13: We had a keyboard issue where when we press enter a lot number of times, we can no longer input with the keyboard. This was fixed 
+by changing how the keyboard buffer works in the kayboard file. Finding the bug: 2 hours. Fixing the bug: 20 minutes. 
+
+
+14: There was a page fault after updating halt. For halt, we used the wrong PID to restore the right process to run. We knew the 
+problem was in halt so we only looked at that function and it took 20 minutes to figure that this was the error. After fixing this, 
+there was no more page fault. 
+
+15: We had another page fault because we where not setting the right PID in the execute function. It took around 2 hours to determine 
+that this was the error; after fixing this, we didn't have a page fault anymore. 
+
+
+16: We couldn't type anything on the terminal. This was because there was no sti() and cli() in scheduling so we where not able to type 
+anything. We had a hard time determining where the error was so we spent over 3 hours looking through multiple files yet at we where able
+to find out that we needed sti() and cli() later. After this, we where able to type on terminal.  
