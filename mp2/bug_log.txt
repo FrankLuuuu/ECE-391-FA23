@@ -1,0 +1,20 @@
+1: When I first wrote draw_vert_line and tested it, scrolling to the right instantly led to a black screen. I copied and pasted the code from draw horizontal line and when 
+    changing between x and y, I missed a few variables. For example, I was still using the varibale horiz_line_fn instead of changing it to vert_line_fn. Finding the bug: 
+    15 minutes. Fixing the bug: 10 minutes.
+
+2: When I finished coding the rest of part 1, my code was not running due to a "‘for’ loop initial declarations are only allowed in C99 mode" error. I had to search up how 
+    to fix it and moved all counter declarations in for loops outside. Finding the bug: 10 minutes. Fixing the bug: 5 minutes.
+
+3: I had a black status bar at the bottom of the screen without the room name, underscore cursor, nor the status message. No matter what operations I did, the texts would 
+    not show up. Eventually, I was experimenting with the color palette and change the value, the status bar changed colors and the texts start showing up. My color value 
+    for the background of the status bar was "0x9A" and it was changed to "0x1B", which fixed the issue. I assume some value turn the status bar black, which then blends 
+    in with the texts. Finding the bug: 5 hours. Fixing the bug: 5 minutes. This one took a while to find because it could have been due to errors from a lot of different 
+    places in the program.
+
+4: The room name is not displaying to the status bar at all. I had an underscore always displayed to the center of the screen. The status message is showing up fine when it
+    should be, but with an underscore at the end. I cannot type onto the status bar. I initially thought the problem was in the offset values of image_gen, but it was actually 
+    because I needed to add a condition when printing the underscore since I only print it if user types a command. Finding the bug: 1 hour. Fixing the bug: 10 minutes.
+
+5: The underscore, along with the room name, is now not displaying at all, and the status message is showing up perfectly. I also cannot type onto the status bar. I initially
+    thought what I did previously to fix #4 made the bug worse. But, it was due to the condition used to call image_gen for printing room name and typed command being 
+    incorrect. I checked if the status message is NULL and I changed it to check if the status message is empty. Finding the bug: 2 hours. Fixing the bug: 15 minutes.
